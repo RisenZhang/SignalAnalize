@@ -17,7 +17,7 @@ namespace StreamReader1
         {
             InitializeComponent();
         }
-        //test new enterprice
+
         string filename = "";
         List<string> date = new List<string>();
         List<string> time = new List<string>();
@@ -51,7 +51,7 @@ namespace StreamReader1
                                "0;","0;"};
         string[] case3 = new string[] { "Flags ","Status ","Detector_array[0][0] ","Detector_array[0][1] ","Detector_array[0][2] ","Detector_array[0][3] ",
                                "Detector_array[0][4] ","Detector_array[0][5] ","Detector_array[0][6] ","Detector_array[0][7] ","Detector_array[0][8] ","Detector_array[0][9] ",
-                               "Detector_array[0][10] ","Detector_array[0][11] ","Detector_array[1][0] ","Detector_array[1][1] ","Detector_array[1][2] ","Detector_array[1][3] ",
+                               "Detector_array[0][10] ","Detector_array[0][e7lt 11] ","Detector_array[1][0] ","Detector_array[1][1] ","Detector_array[1][2] ","Detector_array[1][3] ",
                                "Detector_array[1][4] ","Detector_array[1][5] ","Detector_array[1][6] ","Detector_array[1][7] ","Detector_array[1][8] ","Detector_array[1][9] ",
                                "Detector_array[1][10] ","Detector_array[1][11] ","Detector_array[2][0] ","Detector_array[2][1] ","Detector_array[2][2] ","Detector_array[2][3] ",
                                "Detector_array[2][4] ","Detector_array[2][5] ","Detector_array[2][6] ","Detector_array[2][7] ","Detector_array[2][8] ","Detector_array[2][9] ",
@@ -139,7 +139,7 @@ namespace StreamReader1
             //分割訊號並放入Com_Tx_Buffer陣列中
             char[] separators = { ' ', '\n', '\r', '\t'};
             Com_Tx_Buffer = view_signal[lstShow.SelectedIndices[0]].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
-
+            MessageBox.Show(view_signal[lstShow.SelectedIndices[0]].ToString());
 
             int Com_Packet_Type=1;
 
