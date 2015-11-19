@@ -91,7 +91,7 @@
             this.lstShow.TabIndex = 27;
             this.lstShow.UseCompatibleStateImageBehavior = false;
             this.lstShow.View = System.Windows.Forms.View.Details;
-            this.lstShow.ItemActivate += new System.EventHandler(this.lstShow_ItemActivate);
+            this.lstShow.SelectedIndexChanged += new System.EventHandler(this.lstShow_SelectedIndexChanged);
             // 
             // panel1
             // 
