@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -13,8 +8,7 @@ namespace StreamReader1
 {
     public partial class Form1 : Form
     {
-        Utility tool = new Utility();
-        string filename = "";
+        LogServiceUtility tool = new LogServiceUtility();
         List<string> date = new List<string>();
         List<string> time = new List<string>();
         List<string> attribute = new List<string>();
@@ -35,16 +29,16 @@ namespace StreamReader1
 
         private void openFile_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "LOG|*.log";
+            openFileDialog1.Filter = @"LOG|*.log";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     filename = openFileDialog1.FileName;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show("請選取適當格式", "注意");
+                    MessageBox.Show(@"請選取適當格式", @"注意");
                 }
             }
 
@@ -61,7 +55,7 @@ namespace StreamReader1
             do
             {
                 data = sr.ReadLine();            // 讀取一行文字資料
-                if (data == null||data=="") break;         // 若資料讀取完畢，跳離迴圈
+                if (string.IsNullOrEmpty(data)) break;         // 若資料讀取完畢，跳離迴圈
 
                 date.Add(data.Substring(0, 8));     //切割日期
                 time.Add(data.Substring(9, 8));      //切割時間
@@ -89,7 +83,7 @@ namespace StreamReader1
         private void btn_search_Click(object sender, EventArgs e)
         {
             lstShow.Items.Clear();
-            if (cbb_attr.SelectedItem == "Received")
+            if ((string) cbb_attr.SelectedItem == "Received")
             {
                 for (int i = 0; i < Convert.ToInt32(date.Count.ToString()); i++)
                 {
@@ -105,7 +99,7 @@ namespace StreamReader1
                 }
                 judgecase(cbb_case.SelectedItem.ToString());
             }
-            else if (cbb_attr.SelectedItem == "Send")
+            else if ((string) cbb_attr.SelectedItem == "Send")
             {
                 for (int i = 0; i < Convert.ToInt32(date.Count.ToString()); i++)
                 {
@@ -197,12 +191,9 @@ namespace StreamReader1
         {
             if (lstShow.SelectedIndices.Count > 0)
             {
-
-                string[] Com_Tx_Buffer;
-
                 //分割訊號並放入Com_Tx_Buffer陣列中
                 char[] separators = { ' ', '\n', '\r', '\t' };
-                Com_Tx_Buffer = signal[lstShow.SelectedIndices[0]].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                var Com_Tx_Buffer = signal[lstShow.SelectedIndices[0]].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
                 int Com_Packet_Type = 1;
 
@@ -381,15 +372,13 @@ namespace StreamReader1
 
         private void judgecase(string group)
         {
-            string[] Com_Tx_Buffer = { };
-
             //分割訊號並放入Com_Tx_Buffer陣列中
             char[] separators = { ' ', '\n', '\r', '\t' };
 
             //MessageBox.Show(lstShow.Items.Count.ToString());
             for (int num = lstShow.Items.Count - 1; num >= 0; num--)
             {
-                Com_Tx_Buffer = view_signal[num].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                var Com_Tx_Buffer = signal[num].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
                 //MessageBox.Show(view_signal[num].ToString() + "\n" + lstShow.Items[num].SubItems[3].ToString());
 
                 int chk = Convert.ToInt32(Com_Tx_Buffer[1]);

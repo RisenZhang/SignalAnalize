@@ -320,6 +320,7 @@
         private System.Windows.Forms.Label dec_fuct;
         private System.Windows.Forms.Label dec_type;
         private System.Windows.Forms.TextBox txt_num;
+        private string filename = "";
     }
 }
 

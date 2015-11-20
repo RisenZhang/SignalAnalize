@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace StreamReader1
 {
-    public class Utility
+    public class LogServiceUtility
     {
        //宣告固定使用的CASE項目
        public string[] case0 = new string[] { "Flags ", "Status ", "CONSOLE_VERSION ", "CONSOLE_ASCII ", "Machine_Type ", "new_cpu_code ", 
