@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
@@ -21,7 +22,7 @@ namespace StreamReader1
         List<string> _lstAttribute = new List<string>();
         List<string> _lstSignal = new List<string>();
     
-        List<string> lstResult = new List<string>();
+        List<string> _lstResult = new List<string>();
 
         public LogSearch()
         {
@@ -82,6 +83,7 @@ namespace StreamReader1
         private void btn_search_Click(object sender, EventArgs e)
         {
             lstShow.Items.Clear();
+            _lstResult.Clear();
 
             if ((string) cbb_attr.SelectedItem == "Received")
             {
@@ -105,6 +107,8 @@ namespace StreamReader1
             {
                 Drawlistview();
             }
+
+            MessageBox.Show(@"符合Fuct選取條件的數目:"+_lstResult.Count);
         }
 
         private void cbb_case_SelectedIndexChanged(object sender, EventArgs e)
@@ -301,13 +305,15 @@ namespace StreamReader1
 
         private void Judgefuct(int nameCount, string[] packet, int[] cg, int[] cb, int chk, string judge, string txt, int num)
         {
+            /*chk代表訊號的特定值(index) 過濾使用oriList 確認為顯示資料轉存到lstList中 每次逐個幾確認並且增加*/
+
             //判斷是否選取fuct
             if (chk > -1)
             {
                 //存放訊號值 依照不同CASE訊號值長度也不同
                 string[] content = new string[nameCount];
 
-                /*分析每個封包並轉成訊號值*/
+                /*分析每個封包並轉成訊號值放入content[]中*/
                 int jump = 2;
                 for (int i = 0; i < nameCount; i++)
                 {
@@ -327,23 +333,36 @@ namespace StreamReader1
                     }
                 }
 
+                /*判斷每個訊號裡面的指定fuct是否符合搜尋條件*/
+                
+                int storeIndex = 0;
+                
                 //大於
                 if (judge == ">")
                 {
                     if (int.Parse(content[chk]) > int.Parse(txt))
-                        return;
+                    {
+                        storeIndex = Convert.ToInt32(_lstDate.Count.ToString()) - 1;
+                        _lstResult.Add(storeIndex.ToString());
+                    }
                 }
                 //等於
                 else if (judge == "=")
                 {
                     if (int.Parse(content[chk]) == int.Parse(txt))
-                       return;
+                    {
+                        storeIndex = Convert.ToInt32(_lstDate.Count.ToString()) - 1;
+                        _lstResult.Add(storeIndex.ToString());
+                    }
                 }
                 //小於
                 else if (judge == "<")
                 {
                     if (int.Parse(content[chk]) < int.Parse(txt))
-                        return;
+                    {
+                        storeIndex = Convert.ToInt32(_lstDate.Count.ToString()) - 1;
+                        _lstResult.Add(storeIndex.ToString());
+                    }
                 }
             }
         }
@@ -484,29 +503,81 @@ namespace StreamReader1
 
         private void lstShow_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
-            e.DrawDefault = true;
-            var drawList = (ListView)sender;
-
-            MessageBox.Show(drawList.Items[e.ItemIndex].ToString());
+            ListView listView = new ListView();
+            listView = (ListView)sender;
 
             e.DrawBackground();
-
-            Brush myBrush = Brushes.Black;
-
-            e.Graphics.DrawString(drawList.Items[e.ItemIndex].ToString(), e.Item.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
-            for (int i = 0; i < lstResult.Count; i++)
+            e.Graphics.DrawString(listView.Items[e.ItemIndex].Text, e.Item.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            
+            for (int i = 0; i < _lstResult.Count; i++)
             {
-                if (e.ItemIndex.ToString() == lstResult[i].ToString())
+                if (e.ItemIndex.ToString() == _lstResult[i])
                 {
-                    bool selected = ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected) ? true : false;
-                    if (!selected)
+                    bool selected = ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected);
+
+                    //搜尋過後尚未選取發生的事件
+                    if(!selected)
                     {
                         e.Graphics.FillRectangle(new SolidBrush(Color.Silver), e.Bounds);
-                        e.Graphics.DrawString(drawList.Items[e.ItemIndex].ToString(), e.Item.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
+                        e.Graphics.DrawString(listView.Items[e.ItemIndex].Text, e.Item.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                    }
+                    //搜尋過選取時發生的事件
+                    else
+                    {
+
                     }
                 }
+                //搜尋過後不符合的項目想發生的事件往這寫
             }
+
+            if (((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected))
+            {
+                ////設定指定物件填充背景的大小
+                //Rectangle r = new Rectangle(e.Bounds.Left + 4, e.Bounds.Top, TextRenderer.MeasureText(e.Item.Text, e.Item.Font).Width, e.Bounds.Height);
+                ////設定填充的顏色和無間
+                //e.Graphics.FillRectangle(SystemBrushes.Highlight, r);
+                ////設定物件中的字體顏色
+                //e.Item.ForeColor = SystemColors.HighlightText;
+                //e.DrawText();
+
+                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+                e.Graphics.DrawString(listView.Items[e.ItemIndex].Text, e.Item.Font, Brushes.White, e.Bounds, StringFormat.GenericDefault);
+            }
+
             e.DrawFocusRectangle();
+        }
+
+        private void lstShow_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lstShow_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            if (e.ColumnIndex > 0)
+            {
+                e.DrawBackground();
+
+                string searchTerm = "";
+                int index = e.SubItem.Text.IndexOf(searchTerm);
+
+                if (index >= 0)
+                {
+                    string sBefore = e.SubItem.Text.Substring(0, index);
+
+                    Size bounds = new Size(e.Bounds.Width, e.Bounds.Height);
+                    Size s1 = TextRenderer.MeasureText(e.Graphics, sBefore, this.Font, bounds);
+                    Size s2 = TextRenderer.MeasureText(e.Graphics, searchTerm, this.Font, bounds);
+
+                    Rectangle rect = new Rectangle(e.Bounds.X + s1.Width, e.Bounds.Y, s2.Width, e.Bounds.Height);
+
+                    e.Graphics.SetClip(e.Bounds);
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Yellow), rect);
+                    e.Graphics.ResetClip();
+                }
+
+                e.DrawText();
+            }
         }
 
     }

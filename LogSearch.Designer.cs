@@ -85,13 +85,17 @@
             // 
             // lstShow
             // 
-            this.lstShow.Location = new System.Drawing.Point(7, 64);
+            this.lstShow.CheckBoxes = true;
+            this.lstShow.Location = new System.Drawing.Point(5, 65);
             this.lstShow.Name = "lstShow";
+            this.lstShow.OwnerDraw = true;
             this.lstShow.Size = new System.Drawing.Size(1002, 184);
             this.lstShow.TabIndex = 27;
             this.lstShow.UseCompatibleStateImageBehavior = false;
             this.lstShow.View = System.Windows.Forms.View.Details;
+            this.lstShow.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lstShow_DrawColumnHeader);
             this.lstShow.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lstShow_DrawItem);
+            this.lstShow.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lstShow_DrawSubItem);
             this.lstShow.SelectedIndexChanged += new System.EventHandler(this.lstShow_SelectedIndexChanged);
             // 
             // panel1
@@ -265,7 +269,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 508);
+            this.ClientSize = new System.Drawing.Size(1024, 517);
             this.Controls.Add(this.txt_num);
             this.Controls.Add(this.dec_type);
             this.Controls.Add(this.dec_fuct);
