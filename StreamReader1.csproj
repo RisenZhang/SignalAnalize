@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ObjectListView">
-      <HintPath>packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +51,7 @@
       <DependentUpon>LogSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
+    <Compile Include="LogSearchData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LogServiceUtility.cs" />
