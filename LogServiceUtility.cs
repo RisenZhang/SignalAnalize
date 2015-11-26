@@ -10,7 +10,6 @@ namespace StreamReader1
     public class LogServiceUtility
     {
 
-
         //動態產生控制項Label 並依照CASE型態不同進行分析
         public void Createlabel(Panel panel1 ,int nameCount, string[] nameCase, string[] packet, int[] cg, int[] cb)
         {

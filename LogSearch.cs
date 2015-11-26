@@ -108,7 +108,6 @@ namespace StreamReader1
             {
                 Drawlistview();
             }
-
             MessageBox.Show(@"符合Fuct選取條件的數目:"+_lstResult.Count);
         }
 
