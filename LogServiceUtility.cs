@@ -9,12 +9,20 @@ namespace StreamReader1
 {
     public class LogServiceUtility
     {
-
-        //動態產生控制項Label 並依照CASE型態不同進行分析
-        public void Createlabel(Panel panel1 ,int nameCount, string[] nameCase, string[] packet, int[] cg, int[] cb)
+        #region 動態產生Label控制項目
+        /// <summary>
+        /// 動態產生控制項Label 並依照CASE型態不同進行分析
+        /// </summary>
+        /// <param name="panel1">繪製目標 (Panel)</param>
+        /// <param name="nameCase">傳入的CASE項目 ([]string)</param>
+        /// <param name="packet">拆解出來的封包 ([]string)</param>
+        /// <param name="cg">1個封包代表1個訊號 ([]int)</param>
+        /// <param name="cb">2個封包代表1個訊號 ([]int)</param>
+        public void CreateSignalDataLabel(Panel panel1, string[] nameCase, string[] packet, int[] cg, int[] cb)
         {
             panel1.Controls.Clear();
             bool orignalcol = true;
+            int nameCount = nameCase.Length;
             Label[] lblName = new Label[nameCount];
             Label[] lblOrigin = new Label[nameCount];
             Label[] lblAnalyze = new Label[nameCount];
@@ -114,7 +122,7 @@ namespace StreamReader1
 
             /*填充origin&analyze內容*/
             //封包從第3個陣列元素開始為訊號值
-            int jump = 2; 
+            int jump = 2;
 
             //判斷CASE中有幾fuction需要填充
             for (int i = 0; i < nameCount; i++)
@@ -141,9 +149,16 @@ namespace StreamReader1
                 }
             }
 
-        }
+        } 
+        #endregion
 
-        //兩個封包代表一組訊號
+        #region 兩個封包代表一組訊號
+        /// <summary>
+        /// 兩個封包代表一組訊號.
+        /// </summary>
+        /// <param name="packet1">The packet1.</param>
+        /// <param name="packet2">The packet2.</param>
+        /// <returns></returns>
         public string Cbsignal(string packet1, string packet2)
         {
             //分析訊號
@@ -151,13 +166,20 @@ namespace StreamReader1
             string hex2 = Convert.ToString(Convert.ToInt64(packet2, 16), 2).PadLeft(7, '0');
             string sum = Convert.ToInt32(hex2 + hex1, 2).ToString();
             return sum;
-        }
+        } 
+        #endregion
 
-        //一個封包即代表一個訊號
+        #region 一個封包即代表一個訊號
+        /// <summary>
+        /// 一個封包即代表一個訊號.
+        /// </summary>
+        /// <param name="packet">The packet.</param>
+        /// <returns></returns>
         public string Cgsignal(string packet)
         {
             string change = Convert.ToInt32(packet, 16).ToString();
             return change;
-        }
+        } 
+        #endregion
     }
 }

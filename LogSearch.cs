@@ -77,7 +77,7 @@ namespace StreamReader1
             } while (true);
             sr.Close();
 
-            Drawlistview();
+            DrawListview();
 
         }
 
@@ -89,24 +89,24 @@ namespace StreamReader1
             if ((string) cbb_attr.SelectedItem == "Received")
             {
                 if(string.IsNullOrEmpty((string)cbb_case.SelectedItem))
-                    Drawlistview((string) cbb_attr.SelectedItem);
+                    DrawListview((string) cbb_attr.SelectedItem);
                 else
                 {
-                    Drawlistview((string)cbb_attr.SelectedItem, (string)cbb_case.SelectedItem);
+                    DrawListview((string)cbb_attr.SelectedItem, (string)cbb_case.SelectedItem);
                 }
             }
             else if ((string) cbb_attr.SelectedItem == "Send")
             {
                 if (string.IsNullOrEmpty((string)cbb_case.SelectedItem))
-                    Drawlistview((string)cbb_attr.SelectedItem);
+                    DrawListview((string)cbb_attr.SelectedItem);
                 else
                 {
-                    Drawlistview((string)cbb_attr.SelectedItem, (string)cbb_case.SelectedItem);
+                    DrawListview((string)cbb_attr.SelectedItem, (string)cbb_case.SelectedItem);
                 }
             }
             else
             {
-                Drawlistview();
+                DrawListview();
             }
             MessageBox.Show(@"符合Fuct選取條件的數目:"+_lstResult.Count);
         }
@@ -256,32 +256,32 @@ namespace StreamReader1
                 {
                     case 0:
 
-                        _logService.Createlabel(panel1, _logSearchData.Case0.Length, _logSearchData.Case0, Com_Tx_Buffer, _logSearchData.Cg0, _logSearchData.Cb0);
+                        _logService.CreateSignalDataLabel(panel1, _logSearchData.Case0, Com_Tx_Buffer, _logSearchData.Cg0, _logSearchData.Cb0);
                         dec_case.Text = "0";
                         break;
 
                     case 1:
                     fill_default: ;
 
-                        _logService.Createlabel(panel1, _logSearchData.Case1.Length, _logSearchData.Case1, Com_Tx_Buffer, _logSearchData.Cg1, _logSearchData.Cb1);
+                        _logService.CreateSignalDataLabel(panel1, _logSearchData.Case1, Com_Tx_Buffer, _logSearchData.Cg1, _logSearchData.Cb1);
                         dec_case.Text = "1";
                         break;
 
                     case 2:
 
-                        _logService.Createlabel(panel1, _logSearchData.Case2.Length, _logSearchData.Case2, Com_Tx_Buffer, _logSearchData.Cg2, _logSearchData.Cb2);
+                        _logService.CreateSignalDataLabel(panel1, _logSearchData.Case2, Com_Tx_Buffer, _logSearchData.Cg2, _logSearchData.Cb2);
                         dec_case.Text = "2";
                         break;
 
                     case 3:
 
-                        _logService.Createlabel(panel1, _logSearchData.Case3.Length, _logSearchData.Case3, Com_Tx_Buffer, _logSearchData.Cg3, _logSearchData.Cb3);
+                        _logService.CreateSignalDataLabel(panel1, _logSearchData.Case3, Com_Tx_Buffer, _logSearchData.Cg3, _logSearchData.Cb3);
                         dec_case.Text = "3";
                         break;
 
                     case 4:
 
-                        _logService.Createlabel(panel1, _logSearchData.Case4.Length, _logSearchData.Case4, Com_Tx_Buffer, _logSearchData.Cg4, _logSearchData.Cb4);
+                        _logService.CreateSignalDataLabel(panel1, _logSearchData.Case4, Com_Tx_Buffer, _logSearchData.Cg4, _logSearchData.Cb4);
                         dec_case.Text = "4";
                         break;
 
@@ -291,7 +291,17 @@ namespace StreamReader1
             }
         }
 
-        private void Judgefuct(int nameCount, string[] packet, int[] cg, int[] cb, int chk, string judge, string txt, int num)
+        /// <summary>
+        /// 判斷搜尋的Fuction.
+        /// </summary>
+        /// <param name="nameCount">The name count.</param>
+        /// <param name="packet">The packet.</param>
+        /// <param name="cg">The cg.</param>
+        /// <param name="cb">The cb.</param>
+        /// <param name="chk">選擇的Fuct索引值</param>
+        /// <param name="judge">判斷大於、小於、等於</param>
+        /// <param name="txt">使用者數入搜尋資料</param>
+        private void Judgefuct(int nameCount, string[] packet, int[] cg, int[] cb, int chk, string judge, string txt)
         {
             /*chk代表訊號的特定值(index) 過濾使用oriList 確認為顯示資料轉存到lstList中 每次逐個幾確認並且增加*/
 
@@ -355,7 +365,11 @@ namespace StreamReader1
             }
         }
 
-        private void Drawlistview()
+        #region 繪製ListView
+        /// <summary>
+        /// 重新繪製Listview
+        /// </summary>
+        private void DrawListview()
         {
             //清空lst數據
             _lstDate.Clear();
@@ -372,7 +386,11 @@ namespace StreamReader1
             lstShow.EndUpdate();
         }
 
-        private void Drawlistview(string attribuate)
+        /// <summary>
+        /// 重新繪製Listview
+        /// </summary>
+        /// <param name="attribuate">The attribuate. (string)</param>
+        private void DrawListview(string attribuate)
         {
             //清空lst數據
             _lstDate.Clear();
@@ -391,7 +409,12 @@ namespace StreamReader1
             lstShow.EndUpdate();
         }
 
-        private void Drawlistview(string attribuate, string group)
+        /// <summary>
+        /// 重新繪製Listview
+        /// </summary>
+        /// <param name="attribuate">The attribuate. (string)</param>
+        /// <param name="group">The case. (string)</param>
+        private void DrawListview(string attribuate, string group)
         {
             //清空lst數據
             _lstDate.Clear();
@@ -415,7 +438,7 @@ namespace StreamReader1
                             {
                                 Draw(i);
                             }
-                            Judgefuct(_logSearchData.Case0.Length, Com_Tx_Buffer, _logSearchData.Cg0, _logSearchData.Cb0, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text, i);
+                            Judgefuct(_logSearchData.Case0.Length, Com_Tx_Buffer, _logSearchData.Cg0, _logSearchData.Cb0, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text);
                             break;
                         case "case 1":
                             if (chk != Global.COM_NORMAL_MODE && chk != Global.COM_CALIBRATION_MODE && chk != Global.COM_POLL_CALIBRATION_1 && chk != Global.COM_SET_CALIBRATION_1 &&
@@ -423,7 +446,7 @@ namespace StreamReader1
                             {
                                 Draw(i);
                             }
-                            Judgefuct(_logSearchData.Case1.Length, Com_Tx_Buffer, _logSearchData.Cg1, _logSearchData.Cb1, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text, i);
+                            Judgefuct(_logSearchData.Case1.Length, Com_Tx_Buffer, _logSearchData.Cg1, _logSearchData.Cb1, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text);
                             break;
 
                         case "case 2":
@@ -431,21 +454,21 @@ namespace StreamReader1
                             {
                                 Draw(i);
                             }
-                            Judgefuct(_logSearchData.Case2.Length, Com_Tx_Buffer, _logSearchData.Cg2, _logSearchData.Cb2, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text, i);
+                            Judgefuct(_logSearchData.Case2.Length, Com_Tx_Buffer, _logSearchData.Cg2, _logSearchData.Cb2, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text);
                             break;
                         case "case 3":
                             if (chk == Global.COM_POLL_CALIBRATION_2 || chk == Global.COM_SET_CALIBRATION_2)
                             {
                                 Draw(i);
                             }
-                            Judgefuct(_logSearchData.Case3.Length, Com_Tx_Buffer, _logSearchData.Cg3, _logSearchData.Cb3, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text, i);
+                            Judgefuct(_logSearchData.Case3.Length, Com_Tx_Buffer, _logSearchData.Cg3, _logSearchData.Cb3, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text);
                             break;
                         case "case 4":
                             if (chk == Global.COM_SET_MICROPULSE)
                             {
                                 Draw(i);
                             }
-                            Judgefuct(_logSearchData.Case4.Length, Com_Tx_Buffer, _logSearchData.Cg4, _logSearchData.Cb4, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text, i);
+                            Judgefuct(_logSearchData.Case4.Length, Com_Tx_Buffer, _logSearchData.Cg4, _logSearchData.Cb4, cbb_fuct.SelectedIndex, (string)cbb_judge.SelectedItem, txt_num.Text);
                             break;
                     }
 
@@ -455,15 +478,10 @@ namespace StreamReader1
             lstShow.EndUpdate();
         }
 
-        private string[] SplitSignal(string signal)
-        {
-            //分割訊號並放入Com_Tx_Buffer陣列中
-            char[] separators = { ' ', '\n', '\r', '\t' };
-            var Com_Tx_Buffer = signal.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-
-            return Com_Tx_Buffer;
-        }
-
+        /// <summary>
+        /// 繪製Listview裡面的項目
+        /// </summary>
+        /// <param name="i">需要繪製的個數 (int)</param>
         private void Draw(int i)
         {
             //宣告一個ListViewItem物件
@@ -477,7 +495,24 @@ namespace StreamReader1
             _lstTime.Add(_oriTime[i]);
             _lstAttribute.Add(_oriAttribute[i]);
             _lstSignal.Add(_oriSignal[i]);
-        }
+        } 
+        #endregion
+
+        #region 分割訊號
+        /// <summary>
+        /// 分割singal放入Com_Tx_Buffer[]裡面 共會有48個.
+        /// </summary>
+        /// <param name="signal">The signal.</param>
+        /// <returns></returns>
+        private string[] SplitSignal(string signal)
+        {
+            //分割訊號並放入Com_Tx_Buffer陣列中
+            char[] separators = { ' ', '\n', '\r', '\t' };
+            var Com_Tx_Buffer = signal.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            return Com_Tx_Buffer;
+        } 
+        #endregion
 
         private void lstShow_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
